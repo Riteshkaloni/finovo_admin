@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { BaseUrl } from './baseUrl';
+
 
 const Invitation = () => {
 const [email, setEmail]=useState("");

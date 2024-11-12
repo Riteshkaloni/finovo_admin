@@ -2,34 +2,43 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import "./App.css";
 import Home from "./Pages/Home/Home";
 import Navbar from "./Components/Navbar/Navbar";
-import Header from "./Components/Header/Header"
+import Header from "./Components/Header/Header";
 import SignUp from "./Components/SuperAdmin/SignUp";
 import LoginPage from "./Components/Login";
-import Invitation from "./Components/Invitation";
-
+import OtpPage from "./Components/SuperAdmin/OtpPage";
+import ForgotPassword from "./Components/SuperAdmin/ForgotPassword";
+// import Invitation from "./Components/Invitation";
+// import LoginSignup from "./Navigation/LoginSignUp";
+import SubAdminLoginPage from "./Components/SubAdmin/SubAdminLoginPage";
+import MyProfile from "./Components/SuperAdmin/AddNamesAdmin/MyProfile";
+import AdminName from "./Components/SuperAdmin/AddNamesAdmin/AdminName";
 
 const App = () => {
   return (
+    <>
+      <div className="flex top-0 items-start my-auto">
+        {localStorage.getItem("authAdmin") && <Navbar />}
 
-      <>
+        <Routes>
+          {localStorage.getItem("adminAuth") && (
+            <>
+              <Route path="/" element={<Navbar />} />
+              <Route path="/Header" element={<Header />} />
+              <Route path="/MyProfile" element={<MyProfile/>} />
+              <Route path="/AdminName" element={<AdminName />} />
 
-<div className="flex top-0 items-start my-auto">
-<Navbar/>
 
+            </>
+          )}
 
-
- <Routes>
-
-        <Route path="/" element={<Home />} />
-        <Route path="/Navbar" element={<Navbar />} />
-        <Route path="/Header" element={<Header />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/LoginPage" element={<LoginPage />} />
-        <Route path="/Invitation" element={<Invitation />} />
-      </Routes>
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/LoginPage" element={<LoginPage />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/SubAdminLoginPage" element={<SubAdminLoginPage />} />
+          <Route path="/OtpPage" element={<OtpPage />} />
+        </Routes>
       </div>
-      </>
-
+    </>
   );
 };
 

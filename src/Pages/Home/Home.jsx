@@ -1,11 +1,11 @@
 import React from "react";
-import Navbar from "../../Components/Navbar/Navbar";
+
 import Header from "../../Components/Header/Header";
 
 const Home = () => {
   return (
     <>
-      <div className="  h-screen bg-slate-200 ">
+      <div className="  h-[100vh] bg-slate-200 ">
         <div className="flex    ">
           {/* Part 1 */}
           <div>

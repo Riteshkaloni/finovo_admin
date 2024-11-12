@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BaseUrl } from "./baseUrl";
+import { BaseUrl } from "../BaseUrl";
 
-const LoginPage = () => {
+const SubAdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -11,7 +11,7 @@ const LoginPage = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const apiUrl = `${BaseUrl}/admin/loginSuperAdmin`;
+    const apiUrl = `${BaseUrl}/admin/loginSubAdmin`;
     const payload = { email, password };
 
     try {
@@ -27,8 +27,8 @@ const LoginPage = () => {
 
       if (response.ok) {
         setMessage("Login successful!");
-        localStorage.setItem('adminAuth',data.token)
-        window.open('/',"_self")
+localStorage.setItem('adminAuth', data.token)
+        window.open("/Navbar");
       } else {
         setMessage(data.message || "Login failed. Please try again.");
       }
@@ -41,7 +41,7 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[100vw]">
       <div className="w-full max-w-sm p-6 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Login Super Admin</h2>
+        <h2 className="text-2xl font-bold mb-4">Login Sub Admin</h2>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
@@ -102,4 +102,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SubAdminLoginPage;
