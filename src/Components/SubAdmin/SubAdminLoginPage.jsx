@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BaseUrl } from "../BaseUrl";
+import { BaseUrl } from "../baseUrl";
+
 
 const SubAdminLoginPage = () => {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ const SubAdminLoginPage = () => {
 
       if (response.ok) {
         setMessage("Login successful!");
-localStorage.setItem('adminAuth', data.token)
+localStorage.setItem('token', data.token)
         window.open("/Navbar");
       } else {
         setMessage(data.message || "Login failed. Please try again.");

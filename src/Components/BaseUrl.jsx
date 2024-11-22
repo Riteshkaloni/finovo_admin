@@ -1,4 +1,5 @@
-export const BaseUrl='http://192.168.1.21:9000';
+export const BaseUrl='https://finovoback.playcrickets.co.in';
+
 
 // Set Token Function
 // const setToken = (token) => {

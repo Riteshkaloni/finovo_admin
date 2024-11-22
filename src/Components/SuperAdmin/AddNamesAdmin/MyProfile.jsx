@@ -1,637 +1,327 @@
-// // import React, { useEffect, useState, useRef } from "react";
-// // import { BaseUrl } from "../../baseUrl";
-// // import { CiEdit } from "react-icons/ci";
-// // // import image from "../../../assets/Avatar-Profile-PNG-Pic.png";
-
-// // const MyProfile = () => {
-// //   const [profile, setProfile] = useState({
-// //     firstName: "",
-// //     middleName: "",
-// //     lastName: "",
-// //     image: "",
-// //   });
-
-// //   // const [editable, setEditable] = useState(false);
-// //   const [selectedFile, setSelectedFile] = useState(null);
-// //   const [uploadMessage, setUploadMessage] = useState("");
-// //   const [imageUrl, setImageUrl] = useState();
-
-// //   const token = localStorage.getItem("adminAuth");
-
-// //   const fileInputRef = useRef(null);
-
-// //   // Function to fetch profile data
-// // const fetchProfileData = async ( ) => {
-// //     try {
-// //       const response = await fetch(`${BaseUrl}/admin/getProfile`, {
-// //         method: "GET",
-// //         headers: {
-// //           "Content-Type": "application/json",
-// //           Authorization: `Bearer ${token}`,
-// //         },
-// //       });
-
-// //       if (!response.ok) {
-// //         throw new Error("Failed to fetch profile data");
-// //       }
-
-// //       const data = await response.json();
-// //       setProfile(data);
-// //     } catch (error) {
-// //       console.error("Error fetching profile data:", error);
-// //     }
-// //   };
-
-// //   // Function to update profile data
-// //   const updateProfileData = async () => {
-// //     try {
-// //       const response = await fetch(`${BaseUrl}/admin/addNameAdmins`, {
-// //         method: "PUT",
-// //         headers: {
-// //           "Content-Type": "application/json",
-// //           Authorization: `Bearer ${token}`,
-// //         },
-// //         body: JSON.stringify({
-// //           firstName: profile.firstName,
-// //           middleName: profile.middleName,
-// //           lastName: profile.lastName,
-// //         }),
-// //       });
-
-// //       if (!response.ok) {
-// //         throw new Error("Failed to update profile");
-// //       }
-
-// //       const data = await response.json();
-// //       setProfile(data);
-// //       console.log("Profile updated successfully");
-// //     } catch (error) {
-// //       console.error("Error updating profile:", error);
-// //     }
-// //   };
-
-// //   // Fetch profile data on component mount
-// //   useEffect(() => {
-// //     fetchProfileData();
-// //   }, []);
-
-
-// //   const handleFileChange = (event) => {
-// //     const file = event.target.files[0];
-// //     if (file && file.type.startsWith("image/")) {
-// //       setSelectedFile(file);
-// //       setImageUrl(URL.createObjectURL(file)); // Preview selected image
-// //     } else {
-// //       alert("Please select a valid image file.");
-// //     }
-// //   };
-
-// //   const handleImageClick = () => {
-// //     fileInputRef.current.click();
-// //   };
-// //   // Handle input change
-
-// // const handleChange = (e) => {
-// //   const { name, value } = e.target;
-// //   setProfile((prevProfile) => ({
-// //     ...prevProfile,
-// //     [name]: value,
-// //   }));
-// // };
-
-// //   const handleUpload = async () => {
-// //     if (!selectedFile) {
-// //       alert("Please select a file first!");
-// //       return;
-// //     }
-
-// //     const formData = new FormData();
-// //     formData.append("profilePic", selectedFile);
-
-// //     try {
-// //       const response = await fetch(
-// //         `${BaseUrl}/admin/uploadProfilePictureAdmin`,
-// //         {
-// //           method: "POST",
-// //           body: formData,
-// //           headers: {
-// //             "Content-Type": "application/json",
-// //             Authorization: `Bearer ${token}`,
-// //           },
-// //         }
-// //       );
-
-// //       const data = await response.json();
-
-// //       // Check if the upload was successful
-// //       if (data.status === "success") {
-// //         const newImageUrl = data.profilePicUrl;
-// //         setImageUrl(newImageUrl); // Update image preview
-// //         // updateImageUrl(newImageUrl); // Update parent component if needed
-// //         setUploadMessage(data.message);
-// //       } else {
-// //         setUploadMessage("Failed to upload profile picture.");
-// //       }
-// //     } catch (error) {
-// //       console.error("Error uploading file:", error);
-// //       setUploadMessage(
-// //         "An error occurred while uploading the profile picture."
-// //       );
-// //     }
-// //   };
-
-// //   return (
-// //     <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md max-w-md mx-auto mt-20">
-// //       <h2 className="text-xl font-semibold mb-4">My Profile</h2>
-// //       <CiEdit />
-// //       <div className="mb-4">
-// //         <img
-// //           // src={image }
-// //           src={imageUrl || "https://via.placeholder.com/150"}
-// //           alt="profile"
-// // onClick={handleImageClick}
-// //           className="w-32 h-32 rounded-full border-2 border-gray-300"
-// //         />
-// //       </div>
-// //       <input
-// //         type="file"
-// //         accept="image/*"
-// //         onChange={handleFileChange}
-// //         className="mb-2"
-// //       />
-// //       <input
-// //         type="text"
-// //         name="firstName"
-// //         value={profile.firstName}
-// //         onChange={handleChange}
-// //         placeholder="First Name"
-// //         className="mb-2 p-2 border rounded w-full"
-// //       />
-
-// //       <input
-// //         type="text"
-// //         name="middleName"
-// //         value={profile.middleName}
-// //         onChange={handleChange}
-// //         placeholder="Middle Name"
-// //         className="mb-2 p-2 border rounded w-full"
-// //       />
-// //       <input
-// //         type="text"
-// //         name="lastName"
-// //         value={profile.lastName}
-// //         onChange={handleChange}
-// //         placeholder="Last Name"
-// //         className="mb-2 p-2 border rounded w-full"
-// //       />
-
-// //       <button
-// //         onClick={handleUpload}
-// //         className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-// //       >
-// //         Update Profile
-// //       </button>
-// //       {uploadMessage && <p className="mt-2 text-green-500">{uploadMessage}</p>}
-// //     </div>
-// //   );
-// // };
-
-// // export default MyProfile;
-
-
-// import React, { useEffect, useState, useRef } from "react";
-// import { BaseUrl } from "../../baseUrl";
-// // import { CiEdit } from "react-icons/ci";
-
-// const MyProfile = () => {
-//   const [profile, setProfile] = useState({
-//     firstName: "",
-//     middleName: "",
-//     lastName: "",
-//     image: "",
-//   });
-
-//   const [selectedFile, setSelectedFile] = useState(null);
-//   const [uploadMessage, setUploadMessage] = useState("");
-//   const [imageUrl, setImageUrl] = useState("");
-//   const token = localStorage.getItem("adminAuth");
-//   console.log(token,'---TOKEN----')
-//   // Reference to file input for triggering click
-//   const fileInputRef = useRef(null);
-
-//   // Fetch profile data on component mount
-//   useEffect(() => {
-//     fetchProfileData();
-//   }, []);
-
-
-//   const handleUpdateProfile = async () => {
-//     const updatedProfile = {
-//       firstName: profile.firstName,
-//       middleName: profile.middleName,
-//       lastName: profile.lastName,
-//     };
-
-//     try {
-//       const response = await fetch(`${BaseUrl}/admin/updateProfile`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify(updatedProfile),
-//       });
-
-//       const data = await response.json();
-//       if (response.ok) {
-//         alert(data.message || "Profile updated successfully");
-//         fetchProfileData(); // Refresh profile data after update
-//       } else {
-//         alert("Failed to update profile.");
-//       }
-//     } catch (error) {
-//       console.error("Error updating profile:", error);
-//       alert("An error occurred while updating your profile.");
-//     }
-//   };
-
-//   // Function to fetch profile data
-//   const fetchProfileData = async () => {
-//     try {
-//       const response = await fetch(`${BaseUrl}/admin/getProfile`, {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-// // console.log(token,'function----')
-// // console.log(body)
-//       if (!response.ok) {
-//         throw new Error("Failed to fetch profile data");
-//       }
-
-//       const data = await response.json();
-//       setProfile(data);
-//       setImageUrl(data.image || "https://via.placeholder.com/150");
-//     } catch (error) {
-//       console.error("Error fetching profile data:", error);
-//     }
-//   };
-
-//   // Function to update profile picture on file change
-//   const handleFileChange = (event) => {
-//     const file = event.target.files[0];
-//     if (file && file.type.startsWith("image/")) {
-//       setSelectedFile(file);
-//       setImageUrl(URL.createObjectURL(file)); // Preview selected image
-//     } else {
-//       alert("Please select a valid image file.");
-//     }
-//   };
-
-//   // Function to trigger file input click
-//   const handleImageClick = () => {
-//     fileInputRef.current.click();
-//   };
-
-//   // Function to handle image upload
-//   const handleUpload = async () => {
-//     if (!selectedFile) {
-//       alert("Please select a file first!");
-//       return;
-//     }
-
-//     const formData = new FormData();
-//     formData.append("profilePic", selectedFile);
-
-//     try {
-//       const response = await fetch(`${BaseUrl}/admin/uploadProfilePictureAdmin`, {
-//         method: "POST",
-//         body: formData,
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
-//       const data = await response.json();
-
-//       console.log(data)
-
-//       if (response.ok && data.profilePicUrl) {
-//         setImageUrl(data.profilePicUrl);
-//         setUploadMessage(data.message || "profile picture updated" );
-
-//         setProfile((prevProfile) => ({
-//           ...prevProfile,
-//           image: data.profilePicUrl,
-//         }));
-//       } else {
-//         setUploadMessage("Failed to upload profile picture.");
-//       }
-//     } catch (error) {
-//       console.error("Error uploading file:", error);
-//       setUploadMessage("An error occurred while uploading the profile picture.");
-//     }
-//   };
-
-//   // Handle input change for text fields
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setProfile((prevProfile) => ({
-//       ...prevProfile,
-//       [name]: value,
-//     }));
-//   };
-
-//   return (
-//     <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md max-w-md mx-auto mt-20">
-//       <h2 className="text-xl font-semibold mb-4">My Profile</h2>
-//       <div className="relative">
-//         {/* Clickable profile image */}
-//         <img
-//           src={imageUrl || "https://e7.pngegg.com/pngimages/136/22/png-clipart-user-profile-computer-icons-girl-customer-avatar-angle-heroes-thumbnail.png"}
-//           alt="profile"
-//           className="w-32 h-32 rounded-full border-2 border-gray-300 cursor-pointer"
-//           onClick={handleImageClick}
-//         />
-//         {/* Hidden file input */}
-//         <input
-//           type="file"
-//           accept="image/*"
-//           ref={fileInputRef}
-//           onChange={handleFileChange}
-//           style={{ display: "none" }}
-//         />
-//       </div>
-
-//       <input
-//         type="text"
-//         name="firstName"
-//         value={profile.firstName}
-//         onChange={handleChange}
-//         placeholder="First Name"
-//         className="mb-2 p-2 border rounded w-full"
-//       />
-//       <input
-//         type="text"
-//         name="middleName"
-//         value={profile.middleName}
-//         onChange={handleChange}
-//         placeholder="Middle Name"
-//         className="mb-2 p-2 border rounded w-full"
-//       />
-//       <input
-//         type="text"
-//         name="lastName"
-//         value={profile.lastName}
-//         onChange={handleChange}
-//         placeholder="Last Name"
-//         className="mb-2 p-2 border rounded w-full"
-//       />
-//       <button
-//         onClick={handleUpload}
-//         className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-//       >
-//         Update Profile
-//       </button>
-//       {uploadMessage && <p className="mt-2 text-green-500">{uploadMessage}</p>}
-//     </div>
-//   );
-// };
-
-// export default MyProfile;
-
-
-import React, { useEffect, useState, useRef } from "react";
-import { BaseUrl } from "../../baseUrl";
+import React, { useState, useEffect } from "react";
+import { BaseUrl } from "../../baseUrl"; // Ensure BaseUrl is correctly imported
+import Avatar from "../../../assets/Avatar.png";
+import { FiEdit } from "react-icons/fi";
+import Navbar from "../../Navbar/Navbar";
+import Header from "../../Header/Header";
 
 const MyProfile = () => {
-  const [profile, setProfile] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    image: "",
-  });
+  const [firstName, setFirstName] = useState("");
+  const [middleName, setMiddleName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploadMessage, setUploadMessage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const token = localStorage.getItem("adminAuth");
-
-  // Reference to file input for triggering click
-  const fileInputRef = useRef(null);
-
-  // Fetch profile data on component mount
   useEffect(() => {
-    fetchProfileData();
+    fetchUserData();
+    fetchProfilePicture();
   }, []);
 
-  // Function to fetch profile data
-  const fetchProfileData = async () => {
-    try {
-      const response = await fetch(`${BaseUrl}/admin/getProfile`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile data");
-      }
-
-      const data = await response.json();
-      setProfile({
-        firstName: data.admin.firstName,
-        middleName: data.admin.middleName,
-        lastName: data.admin.lastName,
-        image: data.admin.image || "https://via.placeholder.com/150",
-      });
-      setImageUrl(data.admin.image || "https://via.placeholder.com/150");
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
-
-  // Function to handle input change for text fields
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      [name]: value,
-    }));
-  };
-
-  // Function to handle first name change
-  const handleFirstNameChange = (e) => {
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      firstName: e.target.value,
-    }));
-  };
-
-  // Function to handle middle name change
-  const handleMiddleNameChange = (e) => {
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      middleName: e.target.value,
-    }));
-  };
-
-  // Function to handle last name change
-  const handleLastNameChange = (e) => {
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      lastName: e.target.value,
-    }));
-  };
-
-  // Function to handle image upload
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      alert("Please select a file first!");
+  const fetchUserData = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Authorization token is missing. Please log in.");
       return;
     }
 
-    const formData = new FormData();
-    formData.append("profilePic", selectedFile);
-
+    const apiUrl = `${BaseUrl}/admin/getAdminNames`;
     try {
-      const response = await fetch(`${BaseUrl}/admin/uploadProfilePictureAdmin`, {
-        method: "POST",
-        body: formData,
+      const response = await fetch(apiUrl, {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      const data = await response.json();
-      if (response.ok && data.profilePicUrl) {
-        setImageUrl(data.profilePicUrl);
-        setUploadMessage(data.message || "Profile picture updated successfully!");
-        // Optionally update the profile data to reflect changes
-        setProfile((prevProfile) => ({
-          ...prevProfile,
-          image: data.profilePicUrl,
-        }));
+      if (response.ok) {
+        const data = await response.json();
+        const { firstName, middleName, lastName } = data.admin;
+        setFirstName(firstName);
+        setMiddleName(middleName || "");
+        setLastName(lastName);
       } else {
-        setUploadMessage("Failed to upload profile picture.");
+        setError("Failed to fetch profile details.");
       }
     } catch (error) {
-      console.error("Error uploading file:", error);
-      setUploadMessage("An error occurred while uploading the profile picture.");
+      console.error(error);
+      setError("An error occurred while fetching profile details.");
     }
   };
 
-  // Function to handle profile update
-  const handleUpdateProfile = async () => {
-    const updatedProfile = {
-      firstName: profile.firstName,
-      middleName: profile.middleName,
-      lastName: profile.lastName,
+  const fetchProfilePicture = async () => {
+    const token = localStorage.getItem("token");
+    const apiUrl = `${BaseUrl}/admin/getProfilePictureAdmin`;
+    try {
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setImage(data.profilePicUrl);
+      } else {
+        setImage(null);
+      }
+    } catch (error) {
+      console.error(error);
+      setImage(null);
+    }
+  };
+
+  const uploadProfilePicture = async (file) => {
+    const token = localStorage.getItem("token");
+    const apiUrl = `${BaseUrl}/admin/uploadProfilePictureAdmin`;
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setSuccessMessage("Profile picture updated successfully!");
+        fetchProfilePicture();
+      } else {
+        setError("Failed to upload profile picture.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while uploading profile picture.");
+    }
+  };
+
+  const removeProfilePicture = async () => {
+    const token = localStorage.getItem("token");
+    const apiUrl = `${BaseUrl}/admin/removeProfilePictureAdmin`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setSuccessMessage("Profile picture removed successfully!");
+        setImage(null);
+      } else {
+        setError("Failed to remove profile picture.");
+      }
+    } catch (error) {
+      console.error(error);
+      setError("An error occurred while removing profile picture.");
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+      uploadProfilePicture(file);
+    }
+  };
+
+  const handleImageClick = () => {
+    document.getElementById("profileImageInput").click();
+  };
+
+  const handleCameraClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.capture = "camera";
+    input.onchange = (e) => handleImageChange(e);
+    input.click();
+  };
+
+  const handleEditClick = () => {
+    setShowForm((prevState) => !prevState);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+
+    const token = localStorage.getItem("token");
+    const apiUrl =
+      firstName && lastName
+        ? `${BaseUrl}/admin/updateAdminNames`
+        : `${BaseUrl}/admin/addNameAdmins`;
+
+    const payload = {
+      firstName: firstName.trim(),
+      middleName: middleName.trim(),
+      lastName: lastName.trim(),
     };
 
     try {
-      const response = await fetch(`${BaseUrl}/admin/addNameAdmins`, {
-        method: "POST",
+      const response = await fetch(apiUrl, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(updatedProfile),
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
       if (response.ok) {
-        alert(data.message || "Profile updated successfully");
-        fetchProfileData(); // Refresh profile data after update
+        setSuccessMessage("Profile updated successfully!");
+        setShowForm(false);
+        fetchUserData(); // Reload the profile details
       } else {
-        alert("Failed to update profile.");
+        setError("Failed to update profile.");
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
-      alert("An error occurred while updating your profile.");
+      console.error(error);
+      setError("An error occurred while updating the profile.");
     }
-  };
-
-  // Function to handle file input change
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      setSelectedFile(file);
-      setImageUrl(URL.createObjectURL(file)); // Preview selected image
-    } else {
-      alert("Please select a valid image file.");
-    }
-  };
-
-  // Function to trigger file input click
-  const handleImageClick = () => {
-    fileInputRef.current.click();
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 p-4 rounded-lg shadow-md max-w-md mx-auto mt-20">
-      <h2 className="text-xl font-semibold mb-4">My Profile</h2>
+    <div className="p-4">
+      <div className="flex">
+        <div className="flex-1 w-[78vw]">
+          {/* Header positioned next to Navbar */}
+          <div className="flex items-center p-4 bg-blue-900 text-white">
+            <Header />
+          </div>
+          <h2 className="text-lg font-bold text-start  mt-4">
+            Super Admin Profile
+          </h2>
+          {error && <p className="text-red-600">{error}</p>}
+          {successMessage && <p className="text-green-600">{successMessage}</p>}
 
-      {/* Profile Image Section */}
-      <div className="relative">
-        <img
-          src={imageUrl || "https://via.placeholder.com/150"}
-          alt="profile"
-          className="w-32 h-32 rounded-full border-2 border-gray-300 cursor-pointer"
-          onClick={handleImageClick}
-        />
-        <input
-          type="file"
-          accept="image/*"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }}
-        />
+          {/* Profile Image and Details */}
+          <div className="flex  px-10 space-x-4 mt-6 bg-white py-2 shadow-xl">
+            <div className="relative">
+              <img
+                src={imagePreview || image || Avatar}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover cursor-pointer border-4 border-blue-300"
+                onClick={handleImageClick}
+              />
+              <FiEdit
+                onClick={() => setShowOptions((prev) => !prev)}
+                className="absolute top-1 right-1 bg-white p-1 rounded-full text-blue-600 cursor-pointer shadow"
+              />
+
+              {/* Dropdown options */}
+              {showOptions && (
+                <div className="absolute top-10 left-0 w-48 bg-blue-100 rounded-md shadow-lg py-2 z-10">
+                  <button
+                    onClick={handleCameraClick}
+                    className="w-full text-left px-4 py-2 text-blue-800 hover:bg-blue-200 text-sm"
+                  >
+                    Photo from Device
+                  </button>
+                  <button
+                    onClick={removeProfilePicture}
+                    className="w-full text-left px-4 py-2 text-blue-800 hover:bg-blue-200 text-sm"
+                  >
+                    Remove Photo
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h3 className="text-xl text-blue-300">{`${firstName} ${middleName} ${lastName}`}</h3>
+            </div>
+            <FiEdit
+              onClick={handleEditClick}
+              className="cursor-pointer text-xl text-blue-300 ml-auto hover:text-blue-400"
+            />
+          </div>
+
+          <div className="mt-2 bg-white shadow-xl py-2 px-10 h-24">
+
+            <div className="flex justify-between">
+            <p>First Name</p>
+            <p>Second name</p>
+            <p>Last NAme</p>
+            </div>
+          </div>
+
+          {/* Form for editing profile details */}
+          {showForm && (
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-6 mt-6 max-w-lg mx-auto p-6 border rounded-lg shadow-lg bg-blue-100"
+            >
+              <div>
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm font-medium text-blue-800"
+                >
+                  First Name:
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 mt-1 border rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="middleName"
+                  className="block text-sm font-medium text-blue-800"
+                >
+                  Middle Name:
+                </label>
+                <input
+                  type="text"
+                  id="middleName"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                  className="w-full px-3 py-2 mt-1 border rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm font-medium text-blue-800"
+                >
+                  Last Name:
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 mt-1 border rounded-md"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Update Profile
+              </button>
+            </form>
+          )}
+        </div>
       </div>
-
-      {/* First Name Input */}
-      <input
-        type="text"
-        name="firstName"
-        value={profile.firstName || ""}
-        onChange={handleFirstNameChange}
-        placeholder="First Name"
-        className="mb-2 p-2 border rounded w-full"
-      />
-
-      {/* Middle Name Input */}
-      <input
-        type="text"
-        name="middleName"
-        value={profile.middleName || ""}
-        onChange={handleMiddleNameChange}
-        placeholder="Middle Name"
-        className="mb-2 p-2 border rounded w-full"
-      />
-
-      {/* Last Name Input */}
-      <input
-        type="text"
-        name="lastName"
-        value={profile.lastName || ""}
-        onChange={handleLastNameChange}
-        placeholder="Last Name"
-        className="mb-2 p-2 border rounded w-full"
-      />
-
-      {/* Update Profile Button */}
-      <button
-        onClick={handleUpdateProfile}
-        className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
-      >
-        Update Profile
-      </button>
-
-      {/* Upload Message */}
-      {uploadMessage && <p className="mt-2 text-green-500">{uploadMessage}</p>}
     </div>
   );
 };

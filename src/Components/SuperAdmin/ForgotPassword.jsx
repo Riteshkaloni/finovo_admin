@@ -6,32 +6,32 @@ const ForgotPassword = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [resetToken, setResetToken] = useState(""); // Token from the email link
+  const [resetToken, setResetToken] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [token, settoken] = useState("");
 
-  const [token, setToken] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
-    fetchToken();
+    const token = localStorage.getItem("token");
+    if (token) {
+      settoken(token);
+    }
   }, []);
 
-  const fetchToken = async () => {
-    try {
-      const res = localStorage.getItem("kTOKEN"); // Fetch token from local storage
-      if (res) {
-        setToken(res); // Set the token in state
-      }
-    } catch (error) {
-      console.error("Error fetching token:", error);
-    }
-  };
-  // Handler to send reset password link
   const handleSendLink = async () => {
+    if (!email) {
+      alert("Please enter your email.");
+      return;
+    }
+
     try {
       const response = await fetch(`${BaseUrl}/admin/forgetPasswordAdmins`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ email }),
       });
@@ -49,7 +49,6 @@ const ForgotPassword = () => {
     }
   };
 
-  // Handler to reset the password
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
@@ -59,10 +58,11 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await fetch(`${BaseUrl}/resetPasswordAdmins`, {
+      const response = await fetch(`${BaseUrl}/admin/resetPasswordAdmins`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           resetToken,
@@ -72,6 +72,7 @@ const ForgotPassword = () => {
 
       const data = await response.json();
       if (response.ok) {
+        alert("Password has been reset successfully!");
         setShowConfirmation(true);
       } else {
         alert(data.error || "Failed to reset password");
@@ -114,31 +115,41 @@ const ForgotPassword = () => {
             <h2 className="text-2xl font-semibold mb-6 text-center">
               Reset Password
             </h2>
-            {/* <input
-              type="text"
-              value={resetToken}
-              onChange={(e) => setResetToken(e.target.value)}
-              placeholder="Enter the reset token"
-              className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            /> */}
             <form onSubmit={handleResetPassword}>
-              <input
-                type="password"
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
+                  required
+                />
+                <span
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-3 cursor-pointer text-gray-600"
+                >
+                  {showNewPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
+
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
+                  required
+                />
+                <span
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-3 cursor-pointer text-gray-600"
+                >
+                  {showConfirmPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
+
               <button
                 type="submit"
                 className="w-full py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-800"
@@ -149,7 +160,6 @@ const ForgotPassword = () => {
           </>
         )}
 
-        {/* Confirmation Popup */}
         {showConfirmation && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
             <div className="bg-white p-6 rounded-lg shadow-lg w-80">
