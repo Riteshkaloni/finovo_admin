@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { BaseUrl } from "../baseUrl";
 import Header from "../Header/Header";
+import { MdBlockFlipped } from "react-icons/md";
 
 const SubAdminProfile = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [token, settoken] = useState("");
-  const [newAuthToken, setNewAuthToken] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -21,12 +21,15 @@ const SubAdminProfile = () => {
   // Fetch users
   const fetchUsers = async () => {
     try {
-      const response = await fetch(`${BaseUrl}/admin/getAllSubAdminsManagersEditors`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${BaseUrl}/admin/getAllSubAdminsManagersEditors`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -68,11 +71,10 @@ const SubAdminProfile = () => {
   };
 
   return (
-    <div className="justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[100vw]">
- <div className="flex items-center p-4 bg-gray-100">
-
-          <Header />
-        </div>
+    <div className="justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[80vw]">
+      <div className="flex items-center p-4 bg-gray-100">
+        <Header />
+      </div>
       <h2 className="text-2xl font-semibold text-center mb-6 flex justify-center">
         Sub Admin, Manage and Editor
       </h2>
@@ -117,12 +119,22 @@ const SubAdminProfile = () => {
                     </td>
                     <td className="border p-2">
                       <button
-                        className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="px-4 py-1 bg-lime-400 text-white rounded hover:bg-lime-900"
                         onClick={() =>
                           handleUpdateUsername(user.admin_id, user.username)
                         }
                       >
-                        Update
+                        Edit
+                      </button>
+                    </td>
+                    <td className="border p-2">
+                      <button
+                        className="px-4 py-1 bg-red-300 text-white rounded hover:bg-red-600"
+                        onClick={() =>
+                          handleUpdateUsername(user.admin_id, user.username)
+                        }
+                      >
+                        <MdBlockFlipped />
                       </button>
                     </td>
                   </tr>

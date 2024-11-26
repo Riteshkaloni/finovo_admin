@@ -6,22 +6,23 @@ const ForgotPassword = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [resetToken, setResetToken] = useState("");
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [token, settoken] = useState("");
+  const [token, setToken] = useState("");
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      settoken(token);
+    try {
+      const savedToken = localStorage.getItem("token");
+      if (savedToken) setToken(savedToken);
+    } catch (error) {
+      console.error("Error accessing local storage:", error);
     }
   }, []);
 
   const handleSendLink = async () => {
-    if (!email) {
+    if (!email.trim()) {
       alert("Please enter your email.");
       return;
     }
@@ -38,10 +39,10 @@ const ForgotPassword = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert(data.message || "Password reset link sent to your email");
+        alert(data.message || "Password reset link sent to your email.");
         setEmailSent(true);
       } else {
-        alert(data.error || "Failed to send reset link");
+        alert(data.error || "Failed to send reset link.");
       }
     } catch (error) {
       alert("An error occurred. Please try again later.");
@@ -53,7 +54,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      alert("Passwords do not match");
+      alert("Passwords do not match.");
       return;
     }
 
@@ -64,10 +65,7 @@ const ForgotPassword = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          resetToken,
-          newPassword,
-        }),
+        body: JSON.stringify({ newPassword }),
       });
 
       const data = await response.json();
@@ -75,7 +73,7 @@ const ForgotPassword = () => {
         alert("Password has been reset successfully!");
         setShowConfirmation(true);
       } else {
-        alert(data.error || "Failed to reset password");
+        alert(data.error || "Failed to reset password.");
       }
     } catch (error) {
       alert("An error occurred. Please try again later.");
@@ -84,7 +82,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[100vw]">
+    <div className="flex justify-center items-center min-h-screen bg-gray-200 h-full w-full">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
         {!emailSent ? (
           <>
@@ -125,12 +123,14 @@ const ForgotPassword = () => {
                   className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
                   required
                 />
-                <span
+                <button
+                  type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
+                  aria-label="Toggle new password visibility"
                   className="absolute right-3 top-3 cursor-pointer text-gray-600"
                 >
                   {showNewPassword ? "🙈" : "👁️"}
-                </span>
+                </button>
               </div>
 
               <div className="relative">
@@ -142,12 +142,14 @@ const ForgotPassword = () => {
                   className="w-full p-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-600"
                   required
                 />
-                <span
+                <button
+                  type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label="Toggle confirm password visibility"
                   className="absolute right-3 top-3 cursor-pointer text-gray-600"
                 >
                   {showConfirmPassword ? "🙈" : "👁️"}
-                </span>
+                </button>
               </div>
 
               <button

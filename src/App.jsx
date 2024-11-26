@@ -17,7 +17,9 @@ import UpdateAdminName from "./Components/SuperAdmin/AddNamesAdmin/UpdateAdminNa
 import Dashboard from "./Components/Dashboard/Dashboard";
 import SubAdminPassword from "./Components/SubAdmin/SubAdminPassword";
 import SubAdminProfile from "./Components/SubAdmin/SubAdminProfile";
-import RootNavigation from "./Navigation/RootNavigation";
+import UserManagment from "./Components/SuperAdmin/UserManagment/UserManagment";
+
+
 
 
 
@@ -28,18 +30,21 @@ const App = () => {
         {localStorage.getItem("token") && <Navbar />}
 
         <Routes>
-          {/* {localStorage.getItem("token") ? (
+         {localStorage.getItem("token") ? (
             <>
-              <Route path="/" element={<AllFeatures />} />
-              <Route path="/Header" element={<Header />} />
-              <Route path="/AllFeatures" element={<AllFeatures />} />
-              <Route path="/MyProfile" element={<MyProfile/>} />
+              <Route path="/" element={< Dashboard/>} />
+              <Route path="/header" element={<Header />} />
+              <Route path="/allFeatures" element={<AllFeatures />} />
+              <Route path="/myProfile" element={<MyProfile/>} />
 
-              <Route path="/UpdateAdminName" element={<UpdateAdminName />} />
-              <Route path="/Dashboard" element={<Dashboard/>} />
+              <Route path="/updateAdminName" element={<UpdateAdminName />} />
+              <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/navbar" element={<Navbar/>} />
               <Route path="/passwordPage" element={<SubAdminPassword/>} />
               <Route path="/subAdminProfile" element={<SubAdminProfile/>} />
+              <Route path="/usermanagment" element={<UserManagment/>} />
+
+
 
 
 
@@ -48,9 +53,9 @@ const App = () => {
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/SubAdminLoginPage" element={<SubAdminLoginPage />} />
-          <Route path="/OtpPage" element={<OtpPage />} /></>)} */}
+          <Route path="/OtpPage" element={<OtpPage />} /></>)}
 
-<Route path="/" element={<Dashboard/>} />
+{/* <Route path="/" element={<Dashboard/>} />
               <Route path="/Header" element={<Header />} />
               <Route path="/AllFeatures" element={<AllFeatures />} />
               <Route path="/MyProfile" element={<MyProfile/>} />
@@ -64,7 +69,7 @@ const App = () => {
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/SubAdminLoginPage" element={<SubAdminLoginPage />} />
-          <Route path="/OtpPage" element={<OtpPage />} />
+          <Route path="/OtpPage" element={<OtpPage />} /> */}
         </Routes>
       </div>
     </>

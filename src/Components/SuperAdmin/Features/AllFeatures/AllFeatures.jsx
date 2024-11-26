@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BaseUrl } from "../../../baseUrl";
 import Header from "../../../Header/Header";
+import { FaArrowDownLong } from "react-icons/fa6";
+import { FaArrowUpLong } from "react-icons/fa6";
 
 const AllFeatures = () => {
   const [features, setFeatures] = useState([]); // List of features with sub-features
@@ -41,7 +43,7 @@ const AllFeatures = () => {
     fetchFeatures();
   }, [token]);
 
-  const togglePopup = () => setIsPopupOpen(!isPopupOpen); // Toggle popup
+  const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
   const handleFeatureCheckboxChange = (featureId) => {
     setSelectedFeatures((prevSelected) =>
@@ -97,8 +99,8 @@ const AllFeatures = () => {
         setSuccessMessage("Invitation sent successfully!");
         setEmail("");
         setRole("");
-        setSelectedFeatures([]);
-        setSelectedSubFeatures([]);
+        setSelectedFeatures([]); // Reset after successful invitation
+        setSelectedSubFeatures([]); // Reset after successful invitation
       } else {
         setInvitationError("Failed to send the invitation.");
       }
@@ -118,15 +120,15 @@ const AllFeatures = () => {
             <Header />
           </div>
 
-          <div className="max-w-3xl mx-auto bg-blue-100 shadow-md rounded-lg p-6 mt-3">
-            <h2 className="text-2xl font-bold text-center mb-6 text-blue-800">
+          <div className="max-w-4xl mx-auto bg-[#07553B] shadow-md rounded-lg p-6 mt-3">
+            <h2 className="text-2xl font-bold text-center mb-6 text-[#CED46A]">
               Invite Manager or Editor
             </h2>
 
             <div className="mb-6">
               <button
                 onClick={togglePopup}
-                className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+                className="px-4 py-2 text-white bg-[#CED46A] rounded hover:bg-blue-700"
               >
                 Select Features
               </button>
@@ -138,16 +140,16 @@ const AllFeatures = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter email address"
-                className="w-full mb-4 p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mb-4 p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CED46A]"
               />
 
               <select
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                className="w-full mb-4 p-3 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full mb-4 p-3 border border-[#CED46A] rounded-md focus:outline-none focus:ring-2 focus:ring-[#CED46A]"
               >
                 <option value="">Select Role</option>
-                <option value="2">Sub-Admin</option>
+                <option value="1">Sub-Admin</option>
                 <option value="2">Manager</option>
                 <option value="3">Editor</option>
               </select>
@@ -162,19 +164,48 @@ const AllFeatures = () => {
 
             <button
               onClick={handleSendInvitation}
-              className="w-full p-3 text-white bg-blue-600 border-2 rounded-xl cursor-pointer hover:bg-blue-700"
+              className="w-full p-3 text-white bg-[#CED46A] border-2 rounded-xl cursor-pointer"
             >
               Send Invitation
             </button>
           </div>
+
+          {/* Display selected features and sub-features */}
+          {selectedFeatures.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-xl font-semibold text-black">
+                Selected Features:
+              </h3>
+              <ul className="list-disc pl-6">
+                {features
+                  .filter((feature) => selectedFeatures.includes(feature.feature_id))
+                  .map((feature) => (
+                    <li key={feature.feature_id} className="text-black">
+                      {feature.featureName}
+                      <ul className="pl-6">
+                        {feature.subFeatures
+                          ?.filter((subFeature) =>
+                            selectedSubFeatures.includes(subFeature.subFeature_id)
+                          )
+                          .map((subFeature) => (
+                            <li key={subFeature.subFeature_id} className="text-blue-400">
+                              {subFeature.subFeatureName}
+                            </li>
+                          ))}
+                      </ul>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Popup for Selecting Features */}
       {isPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-4/5 max-w-2xl">
-            <h3 className="text-xl font-semibold mb-4 text-blue-700">
+          <div className="bg-[#07553B] p-6 rounded-lg shadow-lg w-4/5 max-w-2xl">
+            <h3 className="text-xl font-semibold mb-4 text-[#CED46A]">
               Select Features and Sub-Features
             </h3>
             <div className="grid grid-cols-1 gap-4">
@@ -184,13 +215,13 @@ const AllFeatures = () => {
                     <label className="flex items-center space-x-3">
                       <input
                         type="checkbox"
-                        className="form-checkbox h-5 w-5 text-blue-600"
+                        className="form-checkbox h-5 w-5 text-[#CED46A]"
                         checked={selectedFeatures.includes(feature.feature_id)}
                         onChange={() =>
                           handleFeatureCheckboxChange(feature.feature_id)
                         }
                       />
-                      <span className="text-blue-800">
+                      <span className="text-[#CED46A]">
                         {feature.featureName}
                       </span>
                     </label>
@@ -199,8 +230,8 @@ const AllFeatures = () => {
                       className="text-sm text-blue-600 hover:underline"
                     >
                       {expandedFeatures.includes(feature.feature_id)
-                        ? "Hide Sub-Features"
-                        : "Show Sub-Features"}
+                        ? <FaArrowUpLong />
+                        : <FaArrowDownLong />}
                     </button>
                   </div>
                   {expandedFeatures.includes(feature.feature_id) && (
@@ -234,7 +265,7 @@ const AllFeatures = () => {
             </div>
             <button
               onClick={togglePopup}
-              className="mt-4 px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700"
+              className="mt-4 px-4 py-2 text-white bg-[#CED46A] rounded"
             >
               Close
             </button>
