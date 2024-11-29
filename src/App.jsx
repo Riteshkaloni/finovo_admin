@@ -17,7 +17,10 @@ import UpdateAdminName from "./Components/SuperAdmin/AddNamesAdmin/UpdateAdminNa
 import Dashboard from "./Components/Dashboard/Dashboard";
 import SubAdminPassword from "./Components/SubAdmin/SubAdminPassword";
 import SubAdminProfile from "./Components/SubAdmin/SubAdminProfile";
-import UserManagment from "./Components/SuperAdmin/UserManagment/UserManagment";
+// import UserManagment from "./Components/SuperAdmin/UserManagment/UserManagment";
+// import AllUserDetails from "./Components/SuperAdmin/UserManagment/AllUserDetails";
+
+
 
 
 
@@ -40,9 +43,10 @@ const App = () => {
               <Route path="/updateAdminName" element={<UpdateAdminName />} />
               <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/navbar" element={<Navbar/>} />
-              <Route path="/passwordPage" element={<SubAdminPassword/>} />
+              {/* <Route path="/passwordPage" element={<SubAdminPassword/>} /> */}
               <Route path="/subAdminProfile" element={<SubAdminProfile/>} />
-              <Route path="/usermanagment" element={<UserManagment/>} />
+              {/* <Route path="/usermanagment" element={<UserManagment/>} /> */}
+               {/* <Route path="/alluserdetails" element={<AllUserDetails/>} /> */}
 
 
 
@@ -54,6 +58,7 @@ const App = () => {
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/SubAdminLoginPage" element={<SubAdminLoginPage />} />
           <Route path="/OtpPage" element={<OtpPage />} /></>)}
+          <Route path="/passwordPage" element={<SubAdminPassword/>} />
 
 {/* <Route path="/" element={<Dashboard/>} />
               <Route path="/Header" element={<Header />} />

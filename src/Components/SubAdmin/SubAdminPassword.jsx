@@ -1,23 +1,29 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { BaseUrl } from "../baseUrl";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
+
+
 
 const PasswordPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const token = localStorage.getItem("token");
+  const subAdminToken = localStorage.getItem("subToken");
   const navigate = useNavigate();
+  const location=useLocation();
+
+console.log(location.search.split('=')[1])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!token) {
-      alert("Token is missing. Please log in again.");
+    if (!subAdminToken) {
+      alert("Required tokens are missing. Please log in again.");
       return;
     }
+
 
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -30,15 +36,20 @@ const PasswordPage = () => {
         { password, confirmPassword },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${location.search.split('=')[1]}`,
           },
         }
       );
-      console.log(response.data);
-      alert("Password submitted successfully!");
 
-
-      navigate("/SubAdminLoginPage");
+      const { newToken } = response.data;
+      if (newToken) {
+        localStorage.setItem("token", newToken);
+        alert("Password set successfully! Redirecting to login page...");
+        navigate("/LoginPage");
+      } else {
+        alert("Password set successfully! Please log in.");
+        navigate("/LoginPage");
+      }
     } catch (error) {
       console.error(error);
       alert(error.response?.data?.message || "Error submitting password.");

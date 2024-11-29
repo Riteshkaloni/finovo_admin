@@ -4,22 +4,16 @@ import Header from "../Header/Header";
 import { MdBlockFlipped } from "react-icons/md";
 
 const SubAdminProfile = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [token, settoken] = useState("");
+  const [users, setUsers] = useState([]); // State to store fetched users
+  const [loading, setLoading] = useState(true); // State for loading
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    fetchUsers(); // Fetch users on component mount
+  }, []);
 
-    if (token) {
-      settoken(token);
-    }
-
-    fetchUsers();
-  }, [token]);
-
-  // Fetch users
+  // Fetch users from the API
   const fetchUsers = async () => {
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(
         `${BaseUrl}/admin/getAllSubAdminsManagersEditors`,
@@ -33,7 +27,7 @@ const SubAdminProfile = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setUsers(data.data);
+        setUsers(data.data); // Set users in state
       } else {
         alert(data.message || "Failed to fetch users");
       }
@@ -41,12 +35,13 @@ const SubAdminProfile = () => {
       alert("An error occurred while fetching users");
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading
     }
   };
 
   // Update username
   const handleUpdateUsername = async (userId, newUsername) => {
+    const token = localStorage.getItem("token");
     try {
       const response = await fetch(`${BaseUrl}/admin/updateUserName`, {
         method: "PATCH",
@@ -60,7 +55,7 @@ const SubAdminProfile = () => {
       const data = await response.json();
       if (response.ok) {
         alert(data.message || "Username updated successfully");
-        fetchUsers();
+        fetchUsers(); // Refresh the user list after updating
       } else {
         alert(data.message || "Failed to update username");
       }
@@ -99,40 +94,27 @@ const SubAdminProfile = () => {
                     <td className="border p-2">{user.admin_id}</td>
                     <td className="border p-2">{user.email}</td>
                     <td className="border p-2">
-                      {user.role.includes(1) ? "Admin" : "Other"}
+                      {user.role.includes(1)
+                        ? "SubAdmin"
+                        : user.role.includes(2)
+                        ? "Manager"
+                        : user.role.includes(3)
+                        ? "Editor"
+                        : "Unknown"}
                     </td>
                     <td className="border p-2">
                       <input
                         type="text"
                         className="border rounded p-1 w-full"
                         defaultValue={user.username || ""}
-                        onChange={(e) =>
-                          setUsers((prevUsers) =>
-                            prevUsers.map((u) =>
-                              u.admin_id === user.admin_id
-                                ? { ...u, username: e.target.value }
-                                : u
-                            )
-                          )
+                        onBlur={(e) =>
+                          handleUpdateUsername(user.admin_id, e.target.value)
                         }
                       />
                     </td>
                     <td className="border p-2">
                       <button
-                        className="px-4 py-1 bg-lime-400 text-white rounded hover:bg-lime-900"
-                        onClick={() =>
-                          handleUpdateUsername(user.admin_id, user.username)
-                        }
-                      >
-                        Edit
-                      </button>
-                    </td>
-                    <td className="border p-2">
-                      <button
                         className="px-4 py-1 bg-red-300 text-white rounded hover:bg-red-600"
-                        onClick={() =>
-                          handleUpdateUsername(user.admin_id, user.username)
-                        }
                       >
                         <MdBlockFlipped />
                       </button>
