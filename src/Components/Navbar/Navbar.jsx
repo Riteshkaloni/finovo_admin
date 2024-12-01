@@ -1,20 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { MdDashboard } from 'react-icons/md';
-import { BiCustomize } from 'react-icons/bi';
-import axios from 'axios';
-import { BaseUrl } from '../baseUrl';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { MdDashboard } from "react-icons/md";
+import { BiCustomize } from "react-icons/bi";
+import axios from "axios";
+import { BaseUrl } from "../baseUrl";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const [features, setFeatures] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [profilePicture, setProfilePicture] = useState(null); // For storing profile picture URL
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [name, setName] = useState("");
 
-  // Fetch profile picture
+
+  const fetchAdminName = async () => {
+    const apiUrl = `${BaseUrl}/admin/getAdminNames`;
+
+    try {
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const { firstName } = data.admin;
+        setName(firstName);
+      } else {
+        setError("Failed to fetch admin name.");
+      }
+    } catch (error) {
+      console.error("Error fetching admin name:", error);
+      setError("An error occurred while fetching admin name.");
+    }
+  };
+
+
   const fetchProfilePicture = async () => {
     const API_URL = `${BaseUrl}/admin/getProfilePictureAdmin`;
 
@@ -26,16 +52,20 @@ const Navbar = () => {
       });
 
       if (response.status === 200) {
-        setProfilePicture(response.data.profilePictureUrl); // Assuming API returns the image URL
+        setProfilePicture(response.data.profilePicUrl);
+      } else {
+        setError("Failed to load profile picture.");
       }
     } catch (err) {
-      console.error('Failed to fetch profile picture:', err);
-      setError('Failed to load profile picture.');
+      console.error("Failed to fetch profile picture:", err);
+      setError("Failed to load profile picture.");
     }
   };
 
+
   const fetchFeaturesData = async () => {
     const API_URL = `${BaseUrl}/admin/getAllFeatures`;
+
     try {
       setLoading(true);
       const response = await axios.get(API_URL, {
@@ -47,8 +77,8 @@ const Navbar = () => {
       const featuresData = response.data?.features || [];
       setFeatures(featuresData);
     } catch (err) {
-      console.error('Failed to fetch features:', err);
-      setError('Failed to fetch features.');
+      console.error("Failed to fetch features:", err);
+      setError("Failed to fetch features.");
     } finally {
       setLoading(false);
     }
@@ -56,26 +86,27 @@ const Navbar = () => {
 
   useEffect(() => {
     if (token) {
+      fetchAdminName();
       fetchFeaturesData();
-      fetchProfilePicture(); // Fetch profile picture on component mount
+      fetchProfilePicture();
     } else {
-      setError('No token found in local storage.');
+      setError("No token found in local storage.");
     }
   }, [token]);
 
   const handleFeatureClick = (featureName) => {
     switch (featureName) {
-      case 'User and Permission':
-        navigate('/allfeatures');
+      case "User and Permission":
+        navigate("/allfeatures");
         break;
-      case 'Dashboard':
-        navigate('/dashboard');
+      case "Dashboard":
+        navigate("/dashboard");
         break;
-      case 'UserManagement':
-        navigate('/userManagement'); // Adjust the route if needed
+      case "UserManagement":
+        navigate("/userManagement");
         break;
       default:
-        console.error('Unknown feature:', featureName);
+        console.error("Unknown feature:", featureName);
         break;
     }
   };
@@ -84,30 +115,29 @@ const Navbar = () => {
     <div className="w-[270px] rounded-s-lg">
       <aside>
         <div className="px-3 py-4 h-[100vh] bg-[#07553B] ml-2 rounded-xl overflow-x-auto">
+          {/* Logo */}
           <div className="flex justify-center p-2 text-white">
-            <div className="flex justify-start p-1">
-              <MdDashboard />
-            </div>
-            <span className="ml-2 font-xl">FINOVO ADMIN</span>
+            <MdDashboard className="mr-2" />
+            <span className="font-xl">FINOVO ADMIN</span>
           </div>
-
           <hr className="border-t border-[#CED46A] my-2" />
 
-          {/* Profile Picture */}
+          {/* Profile Section */}
           <div className="text-center mb-2">
             {profilePicture ? (
               <img
                 src={profilePicture}
                 alt="Profile"
-                className="w-16 h-16 rounded-full mx-auto"
+                className="w-24 h-20 rounded-full mx-auto"
               />
             ) : (
               <p className="text-[#CED46A]">Loading profile...</p>
             )}
+            {name && <p className="text-white mt-2">{name}</p>}
           </div>
-
           <hr className="border-t border-[#CED46A] my-2" />
 
+          {/* Features List */}
           <div className="mt-4">
             <h3 className="text-[#CED46A] mb-2">Features List</h3>
             {loading && <p className="text-[#CED46A]">Loading...</p>}

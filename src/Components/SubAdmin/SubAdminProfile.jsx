@@ -4,14 +4,14 @@ import Header from "../Header/Header";
 import { MdBlockFlipped } from "react-icons/md";
 
 const SubAdminProfile = () => {
-  const [users, setUsers] = useState([]); // State to store fetched users
-  const [loading, setLoading] = useState(true); // State for loading
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUsers(); // Fetch users on component mount
+    fetchUsers();
   }, []);
 
-  // Fetch users from the API
+
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -27,7 +27,7 @@ const SubAdminProfile = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setUsers(data.data); // Set users in state
+        setUsers(data.data);
       } else {
         alert(data.message || "Failed to fetch users");
       }
@@ -35,7 +35,7 @@ const SubAdminProfile = () => {
       alert("An error occurred while fetching users");
       console.error(error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 

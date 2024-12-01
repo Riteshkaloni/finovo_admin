@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BaseUrl } from "../../baseUrl";
 import Avatar from "../../../assets/Avatar.png";
 import { FiEdit, FiX } from "react-icons/fi";
-import Navbar from "../../Navbar/Navbar";
+
 import Header from "../../Header/Header";
 import finovoLogo from "../../../assets/finovoLogo.png";
 
@@ -99,7 +99,7 @@ const MyProfile = () => {
       }
     } catch (error) {
       console.error(error);
-      setError("An error occurred while uploading profile picture.");
+      setError("An error occurred while  uploading profile picture.");
     }
   };
 
@@ -258,12 +258,16 @@ const MyProfile = () => {
             {/* Static Admin Data Below Profile Image */}
             <div className="bg-blue-50 p-4 rounded-lg mt-4 ml-10 shadow-md">
               <p className="text-sm text-gray-600">
-                <span className="font-semibold text-blue-800">Super Admin:</span> A highly
-                dedicated professional overseeing platform operations, ensuring smooth
-                administration, and managing projects with precision.
+                <span className="font-semibold text-blue-800">
+                  Super Admin:
+                </span>{" "}
+                A highly dedicated professional overseeing platform operations,
+                ensuring smooth administration, and managing projects with
+                precision.
               </p>
               <p className="text-sm text-gray-600 mt-2">
-                <strong>Email:</strong> admin@kurmato.com | <strong>Contact:</strong> 987654321
+                <strong>Email:</strong> admin@kurmato.com |{" "}
+                <strong>Contact:</strong> 987654321
               </p>
             </div>
 
@@ -281,7 +285,10 @@ const MyProfile = () => {
               <h2 className="text-xl font-bold mb-4">Edit Profile</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="firstName" className="block text-sm font-semibold">
+                  <label
+                    htmlFor="firstName"
+                    className="block text-sm font-semibold"
+                  >
                     First Name
                   </label>
                   <input
@@ -293,7 +300,10 @@ const MyProfile = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="middleName" className="block text-sm font-semibold">
+                  <label
+                    htmlFor="middleName"
+                    className="block text-sm font-semibold"
+                  >
                     Middle Name
                   </label>
                   <input
@@ -305,7 +315,10 @@ const MyProfile = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="lastName" className="block text-sm font-semibold">
+                  <label
+                    htmlFor="lastName"
+                    className="block text-sm font-semibold"
+                  >
                     Last Name
                   </label>
                   <input
