@@ -1,9 +1,8 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Home from "./Pages/Home/Home";
 import Navbar from "./Components/Navbar/Navbar";
 import Header from "./Components/Header/Header";
-import SignUp from "./Components/SuperAdmin/SignUp";
+// import SignUp from "./Components/SuperAdmin/SignUp";
 import LoginPage from "./Components/Login";
 import OtpPage from "./Components/SuperAdmin/OtpPage";
 import ForgotPassword from "./Components/SuperAdmin/ForgotPassword";
@@ -17,7 +16,11 @@ import UpdateAdminName from "./Components/SuperAdmin/AddNamesAdmin/UpdateAdminNa
 import Dashboard from "./Components/Dashboard/Dashboard";
 import SubAdminPassword from "./Components/SubAdmin/SubAdminPassword";
 import SubAdminProfile from "./Components/SubAdmin/SubAdminProfile";
-// import UserManagment from "./Components/SuperAdmin/UserManagment/UserManagment";
+import UserManagment from "./Components/SuperAdmin/UserManagment/UserManagment";
+import Block from "./Components/SuperAdmin/UserManagment/block";
+
+
+
 // import AllUserDetails from "./Components/SuperAdmin/UserManagment/AllUserDetails";
 
 
@@ -35,7 +38,7 @@ const App = () => {
         <Routes>
          {localStorage.getItem("token") ? (
             <>
-              <Route path="/" element={< Dashboard/>} />
+              <Route path="/" element={<Dashboard/>} />
               <Route path="/header" element={<Header />} />
               <Route path="/allFeatures" element={<AllFeatures />} />
               <Route path="/myProfile" element={<MyProfile/>} />
@@ -45,15 +48,19 @@ const App = () => {
               <Route path="/navbar" element={<Navbar/>} />
               {/* <Route path="/passwordPage" element={<SubAdminPassword/>} /> */}
               <Route path="/subAdminProfile" element={<SubAdminProfile/>} />
-              {/* <Route path="/usermanagment" element={<UserManagment/>} /> */}
+              <Route path="/usermanagment" element={<UserManagment/>} />
                {/* <Route path="/alluserdetails" element={<AllUserDetails/>} /> */}
+               <Route path="/block" element={<Block/>} />
+
+
 
 
 
 
 
             </>
-          ):(<>          <Route path="/SignUp" element={<SignUp />} />
+          ):(<>
+          {/* <Route path="/SignUp" element={<SignUp />} /> */}
           <Route path="/LoginPage" element={<LoginPage />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/SubAdminLoginPage" element={<SubAdminLoginPage />} />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BaseUrl } from "../baseUrl";
 import Header from "../Header/Header";
-import { MdBlockFlipped } from "react-icons/md";
+import person from "../../assets/person.png"
 
 const SubAdminProfile = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +10,6 @@ const SubAdminProfile = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
-
 
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
@@ -39,39 +38,13 @@ const SubAdminProfile = () => {
     }
   };
 
-  // Update username
-  const handleUpdateUsername = async (userId, newUsername) => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await fetch(`${BaseUrl}/admin/updateUserName`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ username: newUsername, admin_id: userId }),
-      });
-
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.message || "Username updated successfully");
-        fetchUsers(); // Refresh the user list after updating
-      } else {
-        alert(data.message || "Failed to update username");
-      }
-    } catch (error) {
-      alert("An error occurred while updating the username");
-      console.error(error);
-    }
-  };
-
   return (
     <div className="justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[80vw]">
       <div className="flex items-center p-4 bg-gray-100">
         <Header />
       </div>
       <h2 className="text-2xl font-semibold text-center mb-6 flex justify-center">
-        Sub Admin, Manage and Editor
+        Sub Admin, Manager, and Editor
       </h2>
       {loading ? (
         <p className="text-center text-gray-600">Loading users...</p>
@@ -81,18 +54,26 @@ const SubAdminProfile = () => {
             <table className="w-full border-collapse">
               <thead>
                 <tr>
-                  <th className="border p-2">ID</th>
-                  <th className="border p-2">Email</th>
+                  <th className="border p-2">S.No</th>
+                  <th className="border p-2">Profile</th>
+                  <th className="border p-2">Email (ID)</th>
                   <th className="border p-2">Role</th>
-                  <th className="border p-2">Username</th>
-                  <th className="border p-2">Action</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map((user) => (
+                {users.map((user, index) => (
                   <tr key={user.admin_id} className="text-center">
-                    <td className="border p-2">{user.admin_id}</td>
-                    <td className="border p-2">{user.email}</td>
+                    <td className="border p-2">{index + 1}</td>
+                    <td className="border p-2">
+                    <img
+  src={person}
+  alt="Profile"
+  className="h-16 w-16 rounded-full mx-auto"
+/>
+                    </td>
+                    <td className="border p-2">
+                      {`${user.email} (ID: ${user.admin_id})`}
+                    </td>
                     <td className="border p-2">
                       {user.role.includes(1)
                         ? "SubAdmin"
@@ -101,23 +82,6 @@ const SubAdminProfile = () => {
                         : user.role.includes(3)
                         ? "Editor"
                         : "Unknown"}
-                    </td>
-                    <td className="border p-2">
-                      <input
-                        type="text"
-                        className="border rounded p-1 w-full"
-                        defaultValue={user.username || ""}
-                        onBlur={(e) =>
-                          handleUpdateUsername(user.admin_id, e.target.value)
-                        }
-                      />
-                    </td>
-                    <td className="border p-2">
-                      <button
-                        className="px-4 py-1 bg-red-300 text-white rounded hover:bg-red-600"
-                      >
-                        <MdBlockFlipped />
-                      </button>
                     </td>
                   </tr>
                 ))}

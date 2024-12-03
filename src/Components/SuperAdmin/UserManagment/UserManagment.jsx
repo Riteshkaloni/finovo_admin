@@ -1,114 +1,89 @@
-// import React, { useEffect, useState } from "react";
-// import { BaseUrl } from "../../baseUrl";
+import React, { useEffect, useState } from "react";
+import { BaseUrl } from "../../baseUrl";
 
-// const aUserManagement = () => {
-//   const [currentUsername, setCurrentUsername] = useState("");
-//   const [newUsername, setNewUsername] = useState("");
-//   const [message, setMessage] = useState("");
-//   const token = localStorage.getItem("token"); // Dynamically fetch token
+const UserManagement = () => {
+  const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const [message, setMessage] = useState("");
 
-//   const getUsernameUrl = `${BaseUrl}/admin/getUserName`;
-//   const updateUsernameUrl = `${BaseUrl}/admin/updateUserName`;
+  const token = "token";
 
-//   // Fetch current username
-//   const fetchUsername = async () => {
-//     try {
-//       const response = await fetch(getUsernameUrl, {
-//         method: "GET",
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       });
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const response = await fetch(`${BaseUrl}/admin/getUserName`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-//       const data = await response.json();
-//       if (response.ok) {
-//         setCurrentUsername(data.username);
-//       } else {
-//         setMessage(data.message || "Failed to fetch username.");
-//       }
-//     } catch (error) {
-//       console.error("Error fetching username:", error);
-//       setMessage("An error occurred while fetching the username.");
-//     }
-//   };
+        if (response.ok) {
+          const data = await response.json();
+          setUsername(data.username);
+        } else {
+          setMessage("Failed to fetch username");
+        }
+      } catch (error) {
+        setMessage("Error fetching username");
+        console.error("Error fetching username:", error);
+      }
+    };
 
-//   // Update username
-//   const updateUsername = async () => {
-//     if (!newUsername.trim()) {
-//       setMessage("New username cannot be empty.");
-//       return;
-//     }
+    fetchUsername();
+  }, [token]);
 
-//     try {
-//       const response = await fetch(updateUsernameUrl, {
-//         method: "PATCH", // Updated to PATCH as per requirements
-//         headers: {
-//           "Content-Type": "application/json",
-//           Authorization: `Bearer ${token}`,
-//         },
-//         body: JSON.stringify({ username: newUsername }), // Updated payload to match the field
-//       });
+  const updateUsername = async () => {
+    try {
+      const response = await fetch(`${BaseUrl}/admin/updateUserName`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ username: newUsername }),
+      });
 
-//       const data = await response.json();
-//       if (response.ok) {
-//         setMessage("Username updated successfully!");
-//         setCurrentUsername(newUsername); // Update the displayed username
-//       } else {
-//         setMessage(data.message || "Failed to update username.");
-//       }
-//     } catch (error) {
-//       console.error("Error updating username:", error);
-//       setMessage("An error occurred while updating the username.");
-//     }
-//   };
+      if (response.ok) {
+        setUsername(newUsername);
+        setMessage("Username updated successfully");
+        setNewUsername("");
+      } else {
+        setMessage("Failed to update username");
+      }
+    } catch (error) {
+      setMessage("Error updating username");
+      console.error("Error updating username:", error);
+    }
+  };
 
-//   // Fetch username on page load
-//   useEffect(() => {
-//     fetchUsername();
-//   }, []);
+  return (
+    <div className="justify-center items-center min-h-screen bg-gray-200 h-[100%] w-[80vw]">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 className="text-2xl font-bold mb-4">User Management</h1>
+        <p className="text-gray-700 mb-2">
+          <strong>Current Username:</strong> {username || "Loading..."}
+        </p>
+        <div className="mt-4">
+          <input
+            type="text"
+            value={newUsername}
+            onChange={(e) => setNewUsername(e.target.value)}
+            placeholder="Enter new username"
+            className="w-full border p-2 rounded mb-4"
+          />
+          <button
+            onClick={updateUsername}
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          >
+            Update Username
+          </button>
+        </div>
+        {message && <p className={`mt-4 ${message.includes("successfully") ? "text-green-500" : "text-red-500"}`}>{message}</p>}
+      </div>
+    </div>
+  );
+};
 
-//   return (
-//     <div className="justify-center flex  items-center min-h-screen bg-gray-200 h-[100%] w-[80vw] ">
-//       <div className="w-[90%] max-w-md bg-white shadow-lg rounded-lg p-6">
-//         <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-//           Manage Username
-//         </h2>
-
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-600">
-//             Current Username:
-//           </label>
-//           <p className="mt-1 p-2 w-full border border-gray-300 rounded bg-gray-50">
-//             {currentUsername || "Loading..."}
-//           </p>
-//         </div>
-
-//         <div className="mb-4">
-//           <label className="block text-sm font-medium text-gray-600">
-//             New Username:
-//           </label>
-//           <input
-//             type="text"
-//             value={newUsername}
-//             onChange={(e) => setNewUsername(e.target.value)}
-//             placeholder="Enter new username"
-//             className="mt-1 p-2 w-full border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500"
-//           />
-//         </div>
-
-//         <button
-//           onClick={updateUsername}
-//           className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-200"
-//         >
-//           Update Username
-//         </button>
-
-//         {message && (
-//           <p className="mt-4 text-center text-sm text-red-500">{message}</p>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default UserManagement;
+export default UserManagement;
